@@ -40,6 +40,7 @@
   const opacity = [0, 0.25, 0.5, 0.75, 1];
 </script>
 
+<h2>Training days</h2>
 <figure>
   <figcaption>
     {#if picked}
@@ -59,7 +60,8 @@
     onpointermove={(e) => e.buttons && pick(e)}
   >
     {#each grid as week, col (week.start)}
-      {#if week.monthStart}
+      <!-- Skip labels in the last two columns: they would run off the edge. -->
+      {#if week.monthStart && (col === 0 || col < grid.length - 2)}
         <text x={col * (CELL + GAP)} y={9} class="month">{monthShort(week.monthStart)}</text>
       {/if}
       {#each week.cells as cell, row (cell.date)}
@@ -82,6 +84,7 @@
 
 <style>
   figure { margin: 0; }
+  h2 { font-size: 1.25rem; margin: 0 0 4px; }
   figcaption { font-size: 0.875rem; color: var(--text-2); min-height: 1.4em; margin-bottom: 8px; }
   svg { width: 100%; height: auto; display: block; touch-action: none; user-select: none; }
   rect { fill: var(--accent); }

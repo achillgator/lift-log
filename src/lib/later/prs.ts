@@ -85,11 +85,18 @@ export function findPrs(exercise: Pick<Exercise, 'id' | 'kind'>, history: DatedS
   return events;
 }
 
-/** PRs across exercises, newest first. Archived exercises keep their PRs. */
+/**
+ * PRs across exercises, newest first. Archived exercises keep their PRs. When one set is both
+ * the heaviest and the best e1RM, the feed shows it once, as the weight PR.
+ */
 export function prFeed(entries: { exercise: Pick<Exercise, 'id' | 'kind' | 'name'>; history: DatedSet[] }[], limit = 50): PrEvent[] {
   const names = new Map(entries.map((e) => [e.exercise.id, e.exercise.name]));
   return entries
-    .flatMap((e) => findPrs(e.exercise, e.history))
+    .flatMap((e) => {
+      const prs = findPrs(e.exercise, e.history);
+      const weightSets = new Set(prs.filter((p) => p.kind === 'weight').map((p) => p.set.id));
+      return prs.filter((p) => !(p.kind === 'e1rm' && weightSets.has(p.set.id)));
+    })
     .sort((a, b) => compareDates(b.date, a.date) || (names.get(a.exerciseId) ?? '').localeCompare(names.get(b.exerciseId) ?? '') || a.kind.localeCompare(b.kind))
     .slice(0, limit);
 }

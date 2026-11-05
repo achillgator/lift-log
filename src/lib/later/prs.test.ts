@@ -88,9 +88,9 @@ test('prFeed sorts newest first and limits', () => {
     { exercise: a, history: [set('2000-01-01', { weightLb: 100, reps: 1 }), set('2000-01-05', { weightLb: 110, reps: 1 })] },
     { exercise: b, history: [set('2000-01-01', { holdSec: 10 }), set('2000-01-09', { holdSec: 20 })] },
   ]);
+  // The squat set is both heaviest and best e1RM, so it shows once.
   expect(feed.map((p) => [p.date, p.exerciseId, p.kind])).toEqual([
     ['2000-01-09', 'b', 'hold'],
-    ['2000-01-05', 'a', 'e1rm'],
     ['2000-01-05', 'a', 'weight'],
   ]);
   expect(prFeed([{ exercise: a, history: [set('2000-01-01', { weightLb: 1, reps: 1 }), set('2000-01-02', { weightLb: 2, reps: 1 })] }], 1)).toHaveLength(1);
@@ -103,4 +103,14 @@ test('describePr and formatting', () => {
   expect(formatSeconds(125)).toBe('2:05');
   expect(formatDistance(400)).toBe('400 m');
   expect(formatDistance(3218.688)).toBe('2 mi');
+});
+
+test('prFeed keeps an e1RM PR from a different set than the weight PR', () => {
+  const a = { id: 'a', kind: 'barbell' as const, name: 'Bench' };
+  const feed = prFeed([{ exercise: a, history: [
+    set('2000-01-01', { weightLb: 100, reps: 5 }),
+    set('2000-01-02', { weightLb: 105, reps: 1 }),
+    set('2000-01-02', { weightLb: 95, reps: 10 }),
+  ] }]);
+  expect(feed.map((p) => [p.kind, p.set.weightLb])).toEqual([['e1rm', 95], ['weight', 105]]);
 });

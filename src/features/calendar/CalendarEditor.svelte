@@ -128,9 +128,9 @@
 
     {#if draft && draft.type === section.type}
       {@const labels = LABELS[draft.type]}
-      <form class="group form" onsubmit={save} aria-label="{isNew ? 'New' : 'Edit'} {section.title.toLowerCase()}">
+      <form class="group form" novalidate onsubmit={save} aria-label="{isNew ? 'New' : 'Edit'} {section.title.toLowerCase()}">
         <label><span>Name</span><input bind:value={draft.name} placeholder={draft.type === 'phase' ? 'Base block' : 'Name'} maxlength="40" /></label>
-        <label><span>{labels.start}</span><input type="date" bind:value={draft.startDate} required /></label>
+        <label><span>{labels.start}</span><input type="date" bind:value={draft.startDate} /></label>
         <label>
           <span>{labels.end} (optional)</span>
           <input type="date" bind:value={draft.endDate} min={draft.startDate} />
@@ -163,7 +163,7 @@
         {#if draft.type === 'swap'}
           <label>
             <span>Routine to swap in</span>
-            <select bind:value={draft.routineId} required>
+            <select bind:value={draft.routineId}>
               <option value={undefined} disabled>Pick a routine</option>
               {#each routines.value as r (r.id)}<option value={r.id}>{r.name}</option>{/each}
             </select>

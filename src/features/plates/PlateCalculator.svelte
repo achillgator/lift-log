@@ -63,11 +63,14 @@
   {:else if load.belowBar}
     <p class="empty">That is less than the <span class="num">{bar}</span> lb bar.</p>
   {:else}
+    <!-- One side of the bar: collar on the left, plates loaded outward. -->
     <svg class="drawing" viewBox="0 0 200 64" aria-hidden="true">
-      <rect x="0" y="29" width="200" height="6" class="sleeve" />
+      <rect x="0" y="29" width="30" height="6" class="sleeve" />
+      <rect x="30" y="22" width="6" height="20" rx="1" class="sleeve" />
+      <rect x="36" y="28" width="164" height="8" rx="1" class="sleeve" />
       {#each load.perSide as plate, i}
         {@const h = 18 + 44 * (plate / heaviest)}
-        <rect x={60 + i * 11} y={32 - h / 2} width="9" height={h} rx="2" class="plate" />
+        <rect x={40 + i * 11} y={32 - h / 2} width="9" height={h} rx="2" class="plate" />
       {/each}
     </svg>
 
@@ -77,7 +80,7 @@
       {:else}
         Each side:
         {#each groups as [plate, count], i}
-          {#if i > 0}<span class="dot"> · </span>{/if}<span class="num">{count > 1 ? `${count} × ${plate}` : plate}</span>
+          {#if i > 0}<span class="dot" aria-hidden="true">·</span>{/if}<span class="num">{count > 1 ? `${count} × ${plate}` : plate}</span>
         {/each}
       {/if}
     </p>
@@ -109,7 +112,7 @@
   .sleeve { fill: var(--separator); }
   .plate { fill: var(--accent); }
   .per-side { font-size: 1.0625rem; font-weight: 600; margin: 0; }
-  .dot { color: var(--text-2); }
+  .dot { color: var(--text-2); margin: 0 6px; }
   .result { color: var(--text-2); margin: 4px 0 0; }
   .empty { color: var(--text-2); }
   .num { font-variant-numeric: tabular-nums; }
