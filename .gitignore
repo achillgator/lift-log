@@ -1,0 +1,32 @@
+# Dependencies and build output
+node_modules/
+dist/
+dev-dist/
+coverage/
+*.tsbuildinfo
+.vite/
+
+# Env, editor and OS files
+.env
+.env.*
+!.env.example
+*.local
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Claude Code personal settings (shared .claude/settings.json is fine to commit)
+.claude/settings.local.json
+
+# Personal data never goes in this public repo (CLAUDE.md non-negotiable 8).
+# Keep notes, the build guide, real logs and exports in private/ on the laptop.
+private/
+lift-log-backup*
+lift-log-photos*
