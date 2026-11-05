@@ -377,3 +377,9 @@ Example (made up): `2023-04-03 squat 3x5@95; bench 5@65, 5@65, 4@65; hang 30,25,
 ### Storage persistence
 - `requestPersistence()` runs after the first finished workout (from `finishSession`), never on page load, and is feature-detected. A `false` result is normal on iOS and never blocks anything.
 - `storageStatus()` returns `persisted`, `usageBytes` and `quotaBytes` when the browser reports them, and `photoBytes` once photos exist.
+
+### App shell and updates
+- `vite-plugin-pwa` precaches the whole build (`js, css, html, png, svg, ico` plus the manifest) and serves `index.html` for every navigation, so the app runs fully offline. Start URL and scope are `/lift-log/`.
+- The new version installs in the background (`autoUpdate`) but the page never reloads by itself. `src/pwa/` shows an "Updated – tap to reload" toast; otherwise the new version applies on next launch. The app checks for an update whenever it comes back to the front.
+- The toast is mounted by its own entry, `src/pwa/main.ts`, loaded from `index.html`, so `App.svelte` doesn't change.
+- Placeholder icons (a plain barbell glyph in the placeholder accent) come from `node src/pwa/make-icons.mjs`. Replace them when DESIGN.md lands.
