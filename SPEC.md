@@ -276,3 +276,104 @@ The look comes from DESIGN.md (written from the Claude Design handoff). It is th
 - TypeScript throughout. Components never talk to Dexie directly; they go through `src/db`.
 - Progression rules, e1RM, trophy tiers, stall rule, derived lifts, the paste-log parser and migrations are pure functions with Vitest tests.
 - Build the design-system primitives first (shown on a `#/kitchen-sink` page linked from Settings, with the Tweaks panel at the top), then the features on top, so the whole app inherits the same look.
+
+## Data layer reference
+
+How `src/db` and `src/lib` read the spec where it left room. Screens call `api` from `src/db`; the pure rules live in `src/lib`.
+
+### Storage details
+- Schema versions live in `SCHEMA_VERSIONS` (`src/db/schema.ts`). Version 1 declares every table above. Settings is one row under the key `app`. Booleans are not indexed (IndexedDB can't index them); lists filter in memory.
+- Upgrade tests use `upgradeTest({ from, write, check })` from `src/db/upgrade-harness.ts`: build the database at the previous version, write rows, reopen at the latest version, and check nothing was lost (see `schema.upgrade.test.ts`).
+- `settings.trophyTiers` is keyed by exercise id. The seed fills in the four main lifts.
+- Run distances are stored in meters (`distanceM`); routines and the UI talk in miles. Hold exercises use a routine item's `reps` as seconds. Interval reps are a run item with `sets` = default count, `distanceM` per rep, and optional `targetTimeSec`/`targetTimeMaxSec` and `note` (extra work).
+- Deleting a routine or exercise means archiving it (`archived: true`), so history keeps its names.
+
+### Pre-fill and progression
+- `startSession(date, routineId)` returns the existing draft for that date and routine, or creates one. Each planned set starts with its actual values equal to its targets, so tapping it means "done as planned".
+- "Last weight in the same routine" means the heaviest done set of the exercise in the latest finished session of that routine. With no history in that routine, the latest weight from any routine is used and held (never increased). With no history at all, the weight is left blank.
+- "Every set hit target reps" means every set was done, not skipped, with reps >= its target reps. Effort is the finished session's effort.
+- Rep ranges come from the routine item (`reps`..`repsMax`), else from the exercise (`repMin`..`repMax`). Under the same gate as auto-increase, the target goes up one rep per session until it reaches repMax; after a session with every set at repMax, the weight goes up by incrementLb and the reps reset to repMin. A miss holds both. Bodyweight lifts with no weight stay at repMax.
+- Derived lifts use `pct` as a percent (80 = 80%) of the source exercise's heaviest done set in its latest finished session of the source routine, rounded to the derived exercise's `roundToLb`. With no source history they fall back to their own progression.
+- Stall: weeks run Monday to Sunday, and a week counts as missed when the exercise's last session that week missed reps. A stall means `rules.stallWeeks` consecutive missed weeks ending with the latest session's week. The suggestion is the last weight minus `rules.deloadPct`, rounded. `api.stallStatus(exerciseId, routineId?)` returns it; accepting or dismissing is up to the screen.
+- Run distance progression: `startMi` before and during the first `everyWeeks` weeks from `fromDate`, then `+ stepMi` every `everyWeeks` whole weeks, never past `capMi`.
+- Quick-add checklist lines become sets of a `checklist` exercise with the same name, created on first use.
+- Calendar swaps and deloads (v2) don't change `routineForDate` or pre-fill yet.
+
+### Backup file (JSON) and CSV
+- `exportJson()` gives `{"kind": "lift-log-backup", "schemaVersion": 1, "exportedAt": <epoch ms>, "data": {exercises, routines, quickAdds, sessions, sets, maxes, bodyweight, habits, habitLogs, calendar, settings}}`. Photos are never included. Exporting JSON sets `settings.lastExportAt`; CSV does not, since it isn't a full backup.
+- `exportCsv()` has one row per set: `date, routine, exercise, sessionStatus, setNo, targetWeightLb, targetReps, weightLb, reps, strictReps, band, holdSec, distanceM, timeSec, done, skipped`.
+- Import validates first: the kind, a schemaVersion no newer than the app's, every row's required fields, exercise kinds, that every set's session is in the file, and one bodyweight entry per date. An invalid file changes nothing.
+- Merge: rows from the file win on the same id (bodyweight: on the same date); the device keeps its own settings. Replace: clears every table except photos, then loads the file, including its settings.
+- File names come from `backupFileName()`: `lift-log-backup-YYYY-MM-DD.json/.csv`. The program file uses `lift-log-backup-program-YYYY-MM-DD.json`, so .gitignore catches it too.
+
+### Program file format
+A program file is the plan without the history. It holds exercises, routines, quick-adds, habits, calendar rows and `settings` (`autoIncreaseGlobal`, `rules`, `trophyTiers`). It never holds sessions, sets, maxes, bodyweight, habit logs or photos, and a file that contains any of those is rejected.
+
+- Export includes active routines, every active exercise plus any archived one that an exported routine, quick-add or derived lift uses, all quick-adds, active habits, all calendar rows, and trophy tiers for the exported exercises.
+- Validation checks the shape of every row and that every reference (routine items, `derivedFrom`, quick-add sources, calendar `routineId`, `trophyTiers` keys) points at a row in the same file.
+- Merge: rows from the file win on the same id; the device keeps its settings and only adds trophy tiers for lifts that have none.
+- Replace: archives every existing exercise, routine and habit (never deletes them, since logged data points at them), clears quick-adds and calendar rows, then adds the file's rows and applies its settings. Sessions, sets, maxes, bodyweight, habit logs and photos are never touched.
+
+Example (made up):
+
+```json
+{
+  "kind": "lift-log-program",
+  "version": 1,
+  "exportedAt": 1893456000000,
+  "exercises": [
+    { "id": "ex-goblet", "name": "Goblet squat", "kind": "dumbbell", "incrementLb": 5, "roundToLb": 2.5, "autoIncrease": true, "isMain": false, "archived": false },
+    { "id": "ex-press", "name": "Overhead press", "kind": "barbell", "incrementLb": 5, "roundToLb": 5, "autoIncrease": true, "isMain": true, "archived": false },
+    { "id": "ex-press-light", "name": "Light press", "kind": "barbell", "incrementLb": 5, "roundToLb": 5, "autoIncrease": false, "isMain": false, "archived": false,
+      "derivedFrom": { "exerciseId": "ex-press", "routineId": "rt-a", "pct": 80 } },
+    { "id": "ex-plank", "name": "Plank", "kind": "hold", "incrementLb": 0, "roundToLb": 0, "autoIncrease": false, "isMain": false, "archived": false },
+    { "id": "ex-jog", "name": "Jog", "kind": "run", "incrementLb": 0, "roundToLb": 0, "autoIncrease": false, "isMain": false, "archived": false }
+  ],
+  "routines": [
+    { "id": "rt-a", "name": "Day A", "weekday": 2, "order": 0, "archived": false, "items": [
+      { "exerciseId": "ex-goblet", "sets": 3, "reps": 8, "repsMax": 12 },
+      { "exerciseId": "ex-press", "sets": 3, "reps": 5 },
+      { "exerciseId": "ex-plank", "sets": 2, "reps": 40 }
+    ] },
+    { "id": "rt-b", "name": "Day B", "weekday": 4, "order": 1, "archived": false, "items": [
+      { "exerciseId": "ex-press-light", "sets": 3, "reps": 5, "superset": "a" },
+      { "exerciseId": "ex-goblet", "sets": 3, "reps": 10, "superset": "b" }
+    ] },
+    { "id": "rt-jog", "name": "Easy jog", "weekday": 6, "order": 2, "archived": false,
+      "distanceProgression": { "startMi": 1, "stepMi": 0.25, "everyWeeks": 2, "fromDate": "2030-01-07", "capMi": 3 },
+      "items": [{ "exerciseId": "ex-jog", "sets": 1, "reps": 1 }] }
+  ],
+  "quickAdds": [
+    { "id": "qa-warm", "name": "Warm-up", "order": 0, "source": { "lines": ["Easy bike 5 min", "Arm circles"] } },
+    { "id": "qa-b", "name": "Day B", "order": 1, "source": { "routineId": "rt-b" } }
+  ],
+  "habits": [{ "id": "hb-walk", "name": "Walk", "order": 0, "archived": false }],
+  "calendar": [
+    { "id": "cal-1", "type": "deload", "name": "Easy week", "startDate": "2030-03-04", "endDate": "2030-03-10", "pct": 10, "fewerSets": 1 }
+  ],
+  "settings": {
+    "autoIncreaseGlobal": true,
+    "rules": { "stallWeeks": 2, "deloadPct": 10, "maxEffort": 8 },
+    "trophyTiers": { "ex-press": [0.5, 0.6, 0.75, 0.9, 1.05] }
+  }
+}
+```
+
+### Paste log
+Settings → Paste log takes old notes, one workout per line:
+
+```
+YYYY-MM-DD exercise NxR@W; exercise R@W, R@W; hang S,S,S
+```
+
+- Exercises: `squat` (Squat), `bench` (Bench press), `deadlift` (Deadlift), `curl` (saved as "Curl (legacy)", a dumbbell exercise) and `hang` (Dead hang, seconds per set). Names are case-insensitive. A missing exercise is created.
+- Within an exercise, comma-separated groups are `NxR@W` (N sets of R reps at W lb) or `R@W` (one set). The full-width `＠` and `×` work too. Blank lines and lines starting with `#` are skipped.
+- Each line is saved as a finished session under the routine "Legacy 5x5" (created archived, so it never shows up as a plan), with every set done as written.
+- `previewPasteLog` returns counts (`sessions`, `sets`, `skipped`) and one error per malformed line, like `Line 4: unknown exercise "press" (use squat, bench, deadlift, curl, hang)`. `savePasteLog` saves nothing while any line has an error.
+- A date that already has a Legacy 5x5 session is skipped, so pasting the same notes twice doesn't create duplicates.
+
+Example (made up): `2023-04-03 squat 3x5@95; bench 5@65, 5@65, 4@65; hang 30,25,20`
+
+### Storage persistence
+- `requestPersistence()` runs after the first finished workout (from `finishSession`), never on page load, and is feature-detected. A `false` result is normal on iOS and never blocks anything.
+- `storageStatus()` returns `persisted`, `usageBytes` and `quotaBytes` when the browser reports them, and `photoBytes` once photos exist.
