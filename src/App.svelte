@@ -5,6 +5,7 @@
   import HistoryScreen from './features/history/HistoryScreen.svelte';
   import SettingsScreen from './features/settings/SettingsScreen.svelte';
   import KitchenSink from './components/KitchenSink.svelte';
+  import LogSheet from './features/log/LogSheet.svelte';
   import TabBar from './components/TabBar.svelte';
   import ToastHost from './components/ToastHost.svelte';
   import { applyTweaks } from './components/tweaks';
@@ -25,8 +26,14 @@
 
   let route = $state(currentRoute());
   $effect(() => onRouteChange((next) => (route = next)));
-  const kitchenSink = $derived(route === 'kitchen-sink');
-  const active = $derived(kitchenSink ? tabs[3] : (tabs.find((t) => route.startsWith(t.route)) ?? tabs[0]));
+  // #/log/<sessionId> opens the Log sheet over the last tab, so a reload restores the draft.
+  const logId = $derived(route.startsWith('log/') ? route.slice(4) : undefined);
+  let underRoute = $state(currentRoute().startsWith('log/') ? 'home' : currentRoute());
+  $effect(() => {
+    if (!route.startsWith('log/')) underRoute = route;
+  });
+  const kitchenSink = $derived(underRoute === 'kitchen-sink');
+  const active = $derived(kitchenSink ? tabs[3] : (tabs.find((t) => underRoute.startsWith(t.route)) ?? tabs[0]));
 </script>
 
 <main>
@@ -37,4 +44,7 @@
   active={active.route}
   onselect={(id) => go(id)}
 />
+{#if logId}
+  {#key logId}<LogSheet sessionId={logId} onclose={() => go(underRoute)} />{/key}
+{/if}
 <ToastHost />

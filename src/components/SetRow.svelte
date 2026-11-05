@@ -27,7 +27,7 @@
   const state = $derived(setState(set, kind));
   const summary = $derived(setSummary(set, kind));
   const weighted = $derived(kind === 'barbell' || kind === 'dumbbell');
-  const suggestion = $derived(weighted && set.weightLb !== keptWeight ? typoGuard(set.weightLb, set.targetWeightLb, weightStep) : undefined);
+  const suggestion = $derived(weighted && !set.skipped && set.weightLb !== keptWeight ? typoGuard(set.weightLb, set.targetWeightLb, weightStep) : undefined);
   const stateLabel = { planned: 'Planned', done: 'Done', edited: 'Done, edited', skipped: 'Skipped' } as const;
 
   // Changing a value means the set happened with that value, so it becomes done.

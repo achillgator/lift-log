@@ -56,6 +56,8 @@
   }
 </script>
 
+<!-- One layer per sheet, so a sheet opened from another stacks (and dims) above it. -->
+<div class="layer">
 <div class="backdrop" transition:dim onclick={onclose} aria-hidden="true"></div>
 <div
   bind:this={panel}
@@ -82,15 +84,16 @@
   <div class="body">{@render children()}</div>
   {#if footer}<footer>{@render footer()}</footer>{/if}
 </div>
+</div>
 
 <style>
-  .backdrop { position: fixed; inset: 0; background: rgb(0 0 0 / 0.4); z-index: 40; }
+  .layer { position: fixed; inset: 0; z-index: 40; }
+  .backdrop { position: absolute; inset: 0; background: rgb(0 0 0 / 0.4); }
   .sheet {
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 41;
     display: flex;
     flex-direction: column;
     background: var(--bg);
