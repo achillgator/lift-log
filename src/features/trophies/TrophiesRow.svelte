@@ -64,11 +64,11 @@
             aria-label="{t.name}: {t.rank?.tierName ?? (t.e1rm === undefined ? 'no sets yet' : 'not ranked')}. Open chart.">
             <span class="top">
               <span class="glyph"><TrophyGlyph size={22} /></span>
-              <span class="tier">{t.rank?.tierName ?? (t.e1rm === undefined ? 'No sets' : '—')}</span>
+              {#if t.rank || t.e1rm === undefined}<span class="tier">{t.rank?.tierName ?? 'No sets'}</span>{/if}
             </span>
             <span class="name">{t.name}</span>
             {#if t.e1rm !== undefined}
-              <span class="big num">{Math.round(t.e1rm)}<span class="unit"> lb e1RM</span></span>
+              <span class="big num">{Math.round(t.e1rm)}<span class="unit">lb e1RM</span></span>
             {:else}
               <span class="hint">Log {t.name} to rank</span>
             {/if}
@@ -111,7 +111,7 @@
   .tier { font-size: 0.8125rem; font-weight: 600; }
   .name { font-size: 0.8125rem; color: var(--text-2); }
   .big { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
-  .unit { font-size: 0.75rem; font-weight: 500; color: var(--text-2); letter-spacing: 0; }
+  .unit { margin-left: 3px; font-size: 0.75rem; font-weight: 500; color: var(--text-2); letter-spacing: 0; }
   .ratio, .next, .hint { font-size: 0.75rem; color: var(--text-2); }
   .bar { display: block; width: 100%; height: 4px; margin: 6px 0 4px; background: var(--surface-2); border-radius: 2px; overflow: hidden; }
   .fill { display: block; height: 100%; background: var(--tier); border-radius: 2px; }

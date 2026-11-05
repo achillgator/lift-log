@@ -35,17 +35,16 @@
     weighted ? name : exercise.kind === 'hold' ? `${name} · longest hold` : `${name} · strict reps`,
   );
   const fmt = (v: number) => (exercise.kind === 'hold' ? formatSeconds(v) : String(Math.round(v)));
-  const what = $derived(weighted ? 'sets' : exercise.kind === 'hold' ? 'holds' : 'sets');
 
   const empty = $derived(
     !allDates.length
       ? weighted
-        ? `No ${name} sets yet. Log a session with ${name} to see your top set and e1RM.`
+        ? `Nothing logged for ${name} yet. Log a session with ${name} to see your top set and e1RM.`
         : exercise.kind === 'hold'
-          ? `No ${name} holds yet. Log ${name} to see your longest hold.`
-          : `No ${name} sets yet. Log ${name} to see your strict reps.`
+          ? `Nothing logged for ${name} yet. Log ${name} to see your longest hold.`
+          : `Nothing logged for ${name} yet. Log ${name} to see your strict reps.`
       : !shownCount
-        ? `No ${name} ${what} ${rangeWords(range)}. Log ${name}, or switch to All.`
+        ? `Nothing logged for ${name} ${rangeWords(range)}. Log ${name}, or switch to All.`
         : undefined,
   );
 

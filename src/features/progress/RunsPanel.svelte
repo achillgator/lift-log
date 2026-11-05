@@ -28,7 +28,7 @@
   });
 
   const groups = $derived.by(() => {
-    if (data.value.status !== 'ok') return { distance: [] as Group[], tests: [] as Group[], anyRuns: false };
+    if (data.value.status !== 'ok') return { distance: [] as Group[], tests: [] as Group[] };
     const { runIds, sessions, routines, sets } = data.value.data;
     const routineOf = new Map(sessions.map((s) => [s.id, s.routineId]));
     const bySession = new Map<string, RunSession>();
@@ -53,7 +53,7 @@
     const distance = relevant.filter((r) => !r.isTest).map(toGroup);
     if (byRoutine.has('')) distance.push({ key: '', title: 'Other runs', runs: byRoutine.get('')! });
     const tests = routines.filter((r) => r.isTest && (byRoutine.has(r.id) || !r.archived)).sort((a, b) => a.order - b.order).map(toGroup);
-    return { distance, tests, anyRuns: runs.length > 0 };
+    return { distance, tests };
   });
 
   function card(g: Group, metric: 'miles' | 'time') {

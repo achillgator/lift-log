@@ -21,7 +21,7 @@
 
   let width = $state(0);
   let active: number | undefined = $state();
-  const pad = { top: 12, right: 8, bottom: 22, left: 8 };
+  const pad = { top: 20, right: 8, bottom: 22, left: 8 };
 
   const max = $derived(Math.max(1, ...bars.map((b) => b.value)));
   const plotW = $derived(Math.max(1, width - pad.left - pad.right));
@@ -85,7 +85,7 @@
         <text class="tick" x={pad.left} y={height - 6}>{formatShortDate(bars[0].date, today)}</text>
         <text class="tick" x={width - pad.right} y={height - 6} text-anchor="end">{formatShortDate(bars[bars.length - 1].date, today)}</text>
       {/if}
-      <text class="tick" x={width - pad.right} y={pad.top + 4} text-anchor="end">{yFormat(max)}</text>
+      <text class="tick" x={width - pad.right} y={pad.top - 8} text-anchor="end">{yFormat(max)}</text>
       {#key animateKey + width}
         {#each bars as bar, i}
           {@const h = Math.max(bar.value > 0 ? 2 : 1, (bar.value / max) * plotH)}
@@ -110,6 +110,7 @@
   .readout { display: flex; flex-wrap: wrap; gap: 4px 12px; min-height: 2.6em; align-content: flex-start; font-size: 0.8125rem; color: var(--text-2); }
   .readout .lead { color: var(--text); font-weight: 600; }
   svg { display: block; touch-action: pan-y; user-select: none; -webkit-user-select: none; overflow: visible; }
+  svg:focus { outline: none; }
   svg:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
   .axis { stroke: var(--separator); stroke-width: 1; }
   .tick { fill: var(--text-2); font-size: 11px; font-variant-numeric: tabular-nums; }

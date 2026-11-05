@@ -41,7 +41,7 @@
   let width = $state(0);
   let scrubDate: string | undefined = $state();
 
-  const pad = { top: 12, right: 8, bottom: 22, left: 8 };
+  const pad = { top: 20, right: 8, bottom: 22, left: 8 };
 
   const allPoints = $derived(series.flatMap((s) => s.points));
   const x0 = $derived(dayNumber(from));
@@ -143,7 +143,7 @@
       <line class="axis" x1={pad.left} x2={width - pad.right} y1={height - pad.bottom} y2={height - pad.bottom} />
       <text class="tick" x={pad.left} y={height - 6}>{formatShortDate(from, today)}</text>
       <text class="tick" x={width - pad.right} y={height - 6} text-anchor="end">{formatShortDate(to, today)}</text>
-      <text class="tick" x={width - pad.right} y={pad.top + 4} text-anchor="end">{yFormat(yDomain[1])}</text>
+      <text class="tick" x={width - pad.right} y={pad.top - 8} text-anchor="end">{yFormat(yDomain[1])}</text>
       <text class="tick" x={width - pad.right} y={height - pad.bottom - 4} text-anchor="end">{yFormat(yDomain[0])}</text>
 
       {#key animateKey + width}
@@ -177,6 +177,7 @@
   .readout .lead { color: var(--text); font-weight: 600; }
   .plot { position: relative; }
   svg { display: block; touch-action: pan-y; user-select: none; -webkit-user-select: none; overflow: visible; }
+  svg:focus { outline: none; }
   svg:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
   .axis { stroke: var(--separator); stroke-width: 1; }
   .tick { fill: var(--text-2); font-size: 11px; font-variant-numeric: tabular-nums; }
