@@ -71,6 +71,8 @@
   onkeydown={keydown}
   transition:rise
 >
+  <!-- Dragging is a pointer shortcut; Close and Escape do the same for keyboard and screen readers. -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
   <header onpointerdown={down} onpointermove={move} onpointerup={up} onpointercancel={up}>
     {#if variant === 'bottom'}<div class="handle" aria-hidden="true"></div>{/if}
     <div class="bar">
