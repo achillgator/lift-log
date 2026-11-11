@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from './Button.svelte';
   import ListGroup from './ListGroup.svelte';
-  import { toasts } from './toast.svelte';
+  import { toasts } from './toasts.svelte';
   import { TWEAKS, applyTweaks, changedCss, loadTweaks, readDefaults, saveTweaks, type TweakValues } from './tweaks';
 
   const defaults: TweakValues = readDefaults();

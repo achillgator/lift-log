@@ -11,7 +11,7 @@
   import EmptyState from '../../components/EmptyState.svelte';
   import { weekdayName } from '../../components/format';
   import { query } from '../../components/query.svelte';
-  import { showError } from '../../components/toast.svelte';
+  import { showError } from '../../components/toasts.svelte';
   import BackHeader from './BackHeader.svelte';
   import { move, nextOrder, renumber } from './reorder';
 

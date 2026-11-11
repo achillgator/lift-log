@@ -1,7 +1,7 @@
 <script lang="ts">
   import Toast from './Toast.svelte';
   import { dim } from './motion';
-  import { toasts } from './toast.svelte';
+  import { toasts } from './toasts.svelte';
 </script>
 
 <div class="host" aria-live="polite">

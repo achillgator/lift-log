@@ -8,7 +8,7 @@
   import Banner from '../../components/Banner.svelte';
   import { formatBytes, formatDate, toISODate } from '../../components/format';
   import { query } from '../../components/query.svelte';
-  import { showError, toasts } from '../../components/toast.svelte';
+  import { showError, toasts } from '../../components/toasts.svelte';
   import RoutineList from '../routines/RoutineList.svelte';
   import RoutineEditor from '../routines/RoutineEditor.svelte';
   import QuickAddList from '../routines/QuickAddList.svelte';

@@ -14,7 +14,7 @@
   import TextField from '../../components/TextField.svelte';
   import { formatDate, formatLb, todayISO } from '../../components/format';
   import { query } from '../../components/query.svelte';
-  import { showError, toasts } from '../../components/toast.svelte';
+  import { showError, toasts } from '../../components/toasts.svelte';
   import BackHeader from '../routines/BackHeader.svelte';
 
   const maxes = query<Max[]>(() => api.listMaxes(), []);

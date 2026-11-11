@@ -11,7 +11,7 @@
   import Banner from '../../components/Banner.svelte';
   import EmptyState from '../../components/EmptyState.svelte';
   import { formatDate } from '../../components/format';
-  import { showError, toasts } from '../../components/toast.svelte';
+  import { showError, toasts } from '../../components/toasts.svelte';
   import { LogController } from './controller.svelte';
   import ExercisePicker from './ExercisePicker.svelte';
   import FinishSheet from './FinishSheet.svelte';

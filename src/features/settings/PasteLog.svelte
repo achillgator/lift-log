@@ -6,7 +6,7 @@
   import ListGroup from '../../components/ListGroup.svelte';
   import Button from '../../components/Button.svelte';
   import Banner from '../../components/Banner.svelte';
-  import { showError, toasts } from '../../components/toast.svelte';
+  import { showError, toasts } from '../../components/toasts.svelte';
   import BackHeader from '../routines/BackHeader.svelte';
   import { describeCounts } from './settings';
 

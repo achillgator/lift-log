@@ -11,7 +11,7 @@
   import ListGroup from '../../components/ListGroup.svelte';
   import ListRow from '../../components/ListRow.svelte';
   import { formatLb, formatNumber } from '../../components/format';
-  import { showError, toasts } from '../../components/toast.svelte';
+  import { showError, toasts } from '../../components/toasts.svelte';
   import { defaultDuration, findPrs, summarize, type Pr } from './logic';
 
   interface Props { session: Session; sets: LoggedSet[]; name: (exerciseId: string) => string; onclose: () => void; ondone: () => void; }

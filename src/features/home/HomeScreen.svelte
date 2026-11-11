@@ -8,7 +8,7 @@
   import { daysSince, needsBackup, weekStrip } from './home';
   import { formatDate, todayISO } from '../../components/format';
   import { query } from '../../components/query.svelte';
-  import { showError, toasts } from '../../components/toast.svelte';
+  import { showError, toasts } from '../../components/toasts.svelte';
   import StartSheet from '../log/StartSheet.svelte';
   import { exportBackup } from '../settings/files';
 

@@ -9,7 +9,7 @@
   import Banner from '../../components/Banner.svelte';
   import EmptyState from '../../components/EmptyState.svelte';
   import { query } from '../../components/query.svelte';
-  import { showError } from '../../components/toast.svelte';
+  import { showError } from '../../components/toasts.svelte';
   import BackHeader from '../routines/BackHeader.svelte';
 
   const exercises = query<Exercise[]>(() => api.listExercises(), []);

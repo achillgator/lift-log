@@ -15,7 +15,7 @@
   import TextField from './TextField.svelte';
   import Toast from './Toast.svelte';
   import TweaksPanel from './TweaksPanel.svelte';
-  import { toasts } from './toast.svelte';
+  import { toasts } from './toasts.svelte';
   import House from 'lucide-svelte/icons/house';
   import ChartLine from 'lucide-svelte/icons/chart-line';
   import History from 'lucide-svelte/icons/history';

@@ -11,7 +11,7 @@
   import EmptyState from '../../components/EmptyState.svelte';
   import { formatLb } from '../../components/format';
   import { query } from '../../components/query.svelte';
-  import { showError, toasts } from '../../components/toast.svelte';
+  import { showError, toasts } from '../../components/toasts.svelte';
   import BackHeader from '../routines/BackHeader.svelte';
 
   interface Props { id: string; }

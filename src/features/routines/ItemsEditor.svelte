@@ -11,7 +11,7 @@
   import SegmentedControl from '../../components/SegmentedControl.svelte';
   import Button from '../../components/Button.svelte';
   import EmptyState from '../../components/EmptyState.svelte';
-  import { toasts } from '../../components/toast.svelte';
+  import { toasts } from '../../components/toasts.svelte';
   import ExercisePicker from '../log/ExercisePicker.svelte';
   import { move } from './reorder';
 

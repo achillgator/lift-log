@@ -12,7 +12,7 @@
   import EmptyState from '../../components/EmptyState.svelte';
   import { formatLb, todayISO, weekdayName } from '../../components/format';
   import { query } from '../../components/query.svelte';
-  import { showError, toasts } from '../../components/toast.svelte';
+  import { showError, toasts } from '../../components/toasts.svelte';
   import BackHeader from './BackHeader.svelte';
   import ItemsEditor from './ItemsEditor.svelte';
 
