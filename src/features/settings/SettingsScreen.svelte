@@ -17,6 +17,7 @@
   import ExerciseEditor from './ExerciseEditor.svelte';
   import WorkingWeights from './WorkingWeights.svelte';
   import Maxes from './Maxes.svelte';
+  import TierEditor from '../trophies/TierEditor.svelte';
   import PasteLog from './PasteLog.svelte';
   import ImportSheet from './ImportSheet.svelte';
   import { exportBackup, exportProgramFile, exportSetsCsv } from './files';
@@ -121,10 +122,7 @@
         <ListRow label="Tested maxes" href="#/settings/maxes" />
       </ListGroup>
 
-      <!-- Trophy tier editor slot: another session builds the editor (trophy tiers live in settings.trophyTiers). -->
-      <div data-slot="trophy-tier-editor">
-        {#if import.meta.env.DEV}<div class="slot">Trophy tier editor goes here</div>{/if}
-      </div>
+      <TierEditor />
 
       <ListGroup header="Backup" footer="Last backup: {lastExport}. Backups stay on this device until you save them somewhere, like Files or iCloud Drive.">
         <ListRow label="Export backup (JSON)" tone="accent" chevron={false} onclick={() => run('export the backup', exportBackup, 'Backup exported.')} />
