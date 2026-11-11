@@ -7,7 +7,12 @@ export interface Exercise {
   derivedFrom?: { exerciseId: string; routineId: string; pct: number };
   isMain: boolean; archived: boolean;
 }
-export interface RoutineItem { exerciseId: string; sets: number; reps: number; repsMax?: number; superset?: 'a' | 'b'; }
+export interface RoutineItem {
+  exerciseId: string; sets: number; reps: number; repsMax?: number; superset?: 'a' | 'b';
+  // Optional extras (additive). Holds use `reps` as seconds. Runs use the routine's distanceProgression,
+  // or distanceM here; interval reps use sets as the default count and distanceM per rep.
+  distanceM?: number; targetTimeSec?: number; targetTimeMaxSec?: number; note?: string;
+}
 export interface Routine {
   id: string; name: string; weekday?: number; order: number; isTest?: boolean;
   distanceProgression?: { startMi: number; stepMi: number; everyWeeks: number; fromDate: string; capMi: number };
@@ -46,4 +51,6 @@ export interface Settings {
 export interface FinishInput { durationMin: number; calories?: number; effort?: number; painFlag?: boolean; note?: string; }
 export type ImportMode = 'merge' | 'replace';
 export interface ImportPreview { valid: boolean; errors: string[]; counts: Record<string, number>; }
-export interface StorageStatus { persisted: boolean; usageBytes?: number; quotaBytes?: number; }
+export interface StorageStatus { persisted: boolean; usageBytes?: number; quotaBytes?: number; photoBytes?: number; }
+/** Result of the stall rule for one exercise (additive). */
+export interface StallStatus { exerciseId: string; stalled: boolean; weeks: number; lastWeightLb?: number; suggestedWeightLb?: number; }

@@ -1,7 +1,7 @@
 // The contract between the data layer and the screens. Screens import `api` from src/db and never touch Dexie.
 import type {
   Bodyweight, CalendarEntry, Exercise, FinishInput, Habit, HabitLog, ImportMode, ImportPreview,
-  LoggedSet, Max, QuickAdd, Routine, Session, Settings, StorageStatus,
+  LoggedSet, Max, QuickAdd, Routine, Session, Settings, StallStatus, StorageStatus,
 } from './types';
 
 export interface LiftLogApi {
@@ -49,6 +49,8 @@ export interface LiftLogApi {
 
   getSettings(): Promise<Settings>;
   updateSettings(patch: Partial<Settings>): Promise<void>;
+  /** Stall rule for one exercise (optionally within one routine): missed reps settings.rules.stallWeeks weeks running. */
+  stallStatus(exerciseId: string, routineId?: string): Promise<StallStatus>;
 
   exportJson(): Promise<Blob>;
   exportCsv(): Promise<Blob>;
