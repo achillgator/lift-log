@@ -4,29 +4,47 @@
   import ProgressScreen from './features/progress/ProgressScreen.svelte';
   import HistoryScreen from './features/history/HistoryScreen.svelte';
   import SettingsScreen from './features/settings/SettingsScreen.svelte';
+  import KitchenSink from './components/KitchenSink.svelte';
+  import LogSheet from './features/log/LogSheet.svelte';
+  import TabBar from './components/TabBar.svelte';
+  import ToastHost from './components/ToastHost.svelte';
+  import { applyTweaks } from './components/tweaks';
+  import House from 'lucide-svelte/icons/house';
+  import ChartLine from 'lucide-svelte/icons/chart-line';
+  import History from 'lucide-svelte/icons/history';
+  import Settings from 'lucide-svelte/icons/settings';
 
   const tabs = [
-    { route: 'home', label: 'Home', screen: HomeScreen },
-    { route: 'progress', label: 'Progress', screen: ProgressScreen },
-    { route: 'history', label: 'History', screen: HistoryScreen },
-    { route: 'settings', label: 'Settings', screen: SettingsScreen },
+    { route: 'home', label: 'Home', screen: HomeScreen, icon: House },
+    { route: 'progress', label: 'Progress', screen: ProgressScreen, icon: ChartLine },
+    { route: 'history', label: 'History', screen: HistoryScreen, icon: History },
+    { route: 'settings', label: 'Settings', screen: SettingsScreen, icon: Settings },
   ];
+
+  // Dev-only Tweaks panel values (localStorage) apply app-wide from the first frame.
+  applyTweaks();
 
   let route = $state(currentRoute());
   $effect(() => onRouteChange((next) => (route = next)));
-  const active = $derived(tabs.find((t) => route.startsWith(t.route)) ?? tabs[0]);
+  // #/log/<sessionId> opens the Log sheet over the last tab, so a reload restores the draft.
+  const logId = $derived(route.startsWith('log/') ? route.slice(4) : undefined);
+  let underRoute = $state(currentRoute().startsWith('log/') ? 'home' : currentRoute());
+  $effect(() => {
+    if (!route.startsWith('log/')) underRoute = route;
+  });
+  const kitchenSink = $derived(underRoute === 'kitchen-sink');
+  const active = $derived(kitchenSink ? tabs[3] : (tabs.find((t) => underRoute.startsWith(t.route)) ?? tabs[0]));
 </script>
 
-<main><active.screen /></main>
-<nav>
-  {#each tabs as tab}
-    <button aria-current={tab === active ? 'page' : undefined} onclick={() => go(tab.route)}>{tab.label}</button>
-  {/each}
-</nav>
-
-<style>
-  main { padding: var(--space); padding-bottom: 96px; }
-  nav { position: fixed; inset: auto 0 0 0; display: flex; background: var(--surface); border-top: 1px solid var(--separator); padding-bottom: env(safe-area-inset-bottom); }
-  button { flex: 1; min-height: 49px; background: none; border: 0; color: var(--text-2); }
-  button[aria-current] { color: var(--accent); }
-</style>
+<main>
+  {#if kitchenSink}<KitchenSink />{:else}<active.screen />{/if}
+</main>
+<TabBar
+  tabs={tabs.map((t) => ({ id: t.route, label: t.label, icon: t.icon }))}
+  active={active.route}
+  onselect={(id) => go(id)}
+/>
+{#if logId}
+  {#key logId}<LogSheet sessionId={logId} onclose={() => go(underRoute)} />{/key}
+{/if}
+<ToastHost />
