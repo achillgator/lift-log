@@ -30,3 +30,6 @@ npm-debug.log*
 private/
 lift-log-backup*
 lift-log-photos*
+
+# Other apps screenshots and TASTE.md, used only for design prompts
+design/inspiration/

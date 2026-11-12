@@ -1,0 +1,15 @@
+/* Placeholder tokens until DESIGN.md exists. Components use only these names, so the design can replace the values. */
+:root {
+  --bg: #f4f4f2; --surface: #ffffff; --surface-2: #ebebe8;
+  --text: #1a1a1a; --text-2: #5f5f5f; --separator: #d5d5d0;
+  --accent: #1f4e5f; --pr: #9e4a1c; --danger: #b3261e;
+  --tier-bronze: #a86b3c; --tier-silver: #8e959c; --tier-gold: #c9982e; --tier-platinum: #5e9c97; --tier-diamond: #6c8fd6;
+  --radius: 12px; --space: 16px; --row-height: 52px; --big-number: 2.25rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #101214; --surface: #1a1c1f; --surface-2: #25282c;
+    --text: #eeeeea; --text-2: #a5a5a0; --separator: #33363a;
+    --accent: #6fb1c4; --pr: #f08a4b; --danger: #ef6b62;
+  }
+}
