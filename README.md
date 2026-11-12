@@ -16,38 +16,38 @@ After the first launch, it works fully offline. When a new version is available,
 
 ## Getting started
 
-On launch, there's a small exercise library, an example routine ("Example · Full body") and an example warm-up, just to get you started. You can:
+When you launch, there's a small exercise library, including an example routine and an example warm-up (just to get you started). You can then:
 
-- **Build your routines in the app:** Settings → routines, exercises and quick-adds. Give each routine a weekday, and Home shows it as "Log today" on that day.
-- **Import a program file:** Settings → Import program. A program file holds routines, exercises, quick-adds and rules, but no history. You can preview it before it's applied.
-- **Bring in old notes:** Settings → Paste log turns lines like `2023-04-03 squat 3x5@95; bench 5@65, 5@65` into finished workouts.
-- **Add your bodyweight** so the trophies can rank your lifts (this is according to public data on natural male lifters, so take it with a grain of salt)
+- **Build your routines in the app:** Settings → routines, exercises and quick-adds. You give each routine a weekday, and the home screen shows it as "Log today" on that day.
+- **Import a program file:** Settings → Import program. Program files hold routines, exercises, quick-adds and rules; they don't hold history. You can preview it before it's applied.
+- **You can bring in your old notes:** Settings → Paste log turns lines like `2023-04-03 squat 3x5@95; bench 5@65, 5@65` into finished workouts (if you're importing from something like the notes app, copy and paste all of your previous data and give it to something like Gemini to format everything quickly and efficiently without burning too much usage. Just a suggestion)
+- **Add your bodyweight** so that the trophies can rank your lifts (this is according to public data on natural male lifters, so take it with a grain of salt)
 
 ## Features
 
-- **Log today:** today's routine, pre-filled. Tap a set, or an exercise for all its sets, to mark it done as planned, and use the steppers to change a number (press and hold to go faster). You can also add, skip or remove a set, swap an exercise, or start an empty workout.
-- **Saved on every tap:** closing the app mid-workout loses nothing.
-- **Quick-add:** one tap drops a saved block, like a warm-up or a whole routine, into today.
+- **Log today:** this is today's routine, and its prefilled. You can a set or exercise for all its sets to mark it as done. Using the steppers, you can change a number (you should be able to press and hold to go faster). Additionally, it's possible to add, skip or remove a set, swap an exercise, or start an empty workout.
+- **It's saved after every action,** so even if you accidentally close the app mid-workout, you don't lose anything.
+- **Quick-add** lets you tap once to drop a saved block (like a warm-up or a routine) into today.
 - **Finish summary:**
-  - time (editable), plus calories if you want to add them
-  - volume, sets done and PRs hit
-  - optional effort (1–10), a pain flag and a note
+  - time (editable), + calories if you want to add them (no Apple Watch integration yet, so you'd have to do it manually)
+  - volume, sets done, PRs hit
+  - optional effort (1–10), a pain flag and a note (qualitative data is pretty useful actaully)
 - **Auto-increase:**
-  - Next time's weight goes up when you hit every rep and your effort was 8 or lower.
-  - It can be switched on or off for everything or per lift.
+  - Next time's weight goes up when you hit every rep and if your effort was 8 or lower.
+  - It can be switched on or off for everything AND per lift.
   - Rep-range lifts add reps first, then weight.
-- **Stall check:** if you miss reps 2 weeks running, a banner suggests dropping the weight by 10%. You decide whether to accept it.
+- **Stall check:** if you miss reps for 2 weeks in a row, a banner suggests dropping the weight by 10% (there's an option to decline, too)
 - **Progress charts:**
-  - top set and estimated 1RM per lift, plus pull-ups, dead hang, run distance, timed test runs and weekly volume
+  - top set + est. 1RM per lift, plus pull-ups, dead hang, run distance, timed test runs and weekly volume
   - ranges of 4 weeks, 3 months or all time
-  - drag along a chart to read any date
+  - drag along a chart to view any date
 - **Lift trophies on Home:**
   - Squat, bench, deadlift and overhead press are ranked from Bronze to Diamond by estimated 1RM ÷ bodyweight.
   - Each trophy shows how many lb you need for the next tier.
-  - The tiers are rough rules of thumb and can be edited in Settings.
-- **Bodyweight:** a smoothed 7-day average, with an optional faint line of your daily weigh-ins.
-- **History:** every workout, newest first, all editable.
-- **Undo instead of "Are you sure?":** every log or delete gets an Undo toast. Typing 1000 for a 100 lb lift asks "Did you mean…?"
+  - The tiers are rough rules of thumb and can be edited in Settings (so if you find some data for your demographic you can put that in there).
+- **Bodyweight:** a smoothed 7-day average + optional faint line of your daily weigh-ins.
+- **History:** every workout, (sorted by recency), all editable.
+- **Undo instead of "Are you sure?":** every log or delete gets an Undo toast. Typing 1000 for a 100 lb lift asks "Did you mean…?" (if my implementation worked)
 
 Weights are in lb only. (until someone actually finds this and asks for kgs)
 
