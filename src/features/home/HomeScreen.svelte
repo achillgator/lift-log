@@ -10,6 +10,7 @@
   import { query } from '../../components/query.svelte';
   import { showError, toasts } from '../../components/toasts.svelte';
   import StartSheet from '../log/StartSheet.svelte';
+  import TrophiesRow from '../trophies/TrophiesRow.svelte';
   import { exportBackup } from '../settings/files';
 
   const today = todayISO();
@@ -109,9 +110,8 @@
     {/each}
   </ol>
 
-  <!-- Trophies slot: another session builds src/features/trophies/TrophiesRow.svelte; import and render it here. -->
-  <div class="trophies-slot" data-slot="trophies-row">
-    {#if import.meta.env.DEV}<div class="slot">Trophies row goes here (TrophiesRow.svelte)</div>{/if}
+  <div class="trophies-slot">
+    <TrophiesRow />
   </div>
 </div>
 
