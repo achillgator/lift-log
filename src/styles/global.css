@@ -1,4 +1,51 @@
+/* App-wide base styles. Colors, radius, spacing and sizes come only from tokens.css (and the Tweaks panel). */
+*, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--text); overscroll-behavior: none; }
-body { font: 17px/1.35 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-input, select, textarea { font-size: 16px; }
+body {
+  font: 17px/1.35 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+}
+input, select, textarea { font-size: max(16px, 1rem); font-family: inherit; }
+button, [role='button'], a { -webkit-touch-callout: none; }
+button, nav, header { user-select: none; -webkit-user-select: none; }
 .num { font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Type scale (rem so text scales with the person's settings). */
+.title-large { margin: 0 0 4px; font-size: 2.125rem; line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; }
+.title { margin: 0 0 8px; font-size: 1.375rem; font-weight: 700; letter-spacing: -0.01em; }
+.headline { margin: 0; font-size: 1.0625rem; font-weight: 600; }
+.footnote { margin: 0; font-size: 0.8125rem; color: var(--text-2); }
+.big-number { font-size: var(--big-number); font-weight: 700; line-height: 1.1; font-family: var(--font-num, inherit); font-variant-numeric: tabular-nums; }
+
+/* One screen under the tab bar. */
+.screen { padding: calc(env(safe-area-inset-top) + 12px) var(--space) calc(96px + env(safe-area-inset-bottom)); max-width: 640px; margin: 0 auto; }
+.screen-head { display: flex; align-items: center; gap: 8px; min-height: 44px; margin-bottom: 8px; }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.row-gap { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+/* Dev-only marker for slots other sessions fill in. */
+.slot { padding: 12px var(--space); margin-bottom: 24px; border: 1px dashed var(--separator); border-radius: var(--radius); color: var(--text-2); font-size: 0.8125rem; }
+
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+textarea, select {
+  width: 100%;
+  border: 1px solid var(--separator);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  padding: 10px 12px;
+}
+select { min-height: 44px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
