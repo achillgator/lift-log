@@ -1,27 +1,27 @@
 # Lift Log
 
-A free, offline training log for lifting and running, built for iPhone. Its main job is showing your progress over time: charts, lift trophies and your bodyweight trend. Logging is a quick check-off of a pre-filled workout, usually right after you train.
+This is a free, offline training log I built using Claude Code, primarily for lifting and running. Its main job is showing progress over time: charts, BW trends, etc. I build it so that logging can be a quick thing to do right after your workout, not a cumbersome process that takes the better part of an hour..
 
-There are no accounts, no ads, no analytics and no server. Everything you log stays on your phone.
+There aren't any accounts, ads, analystics, or server; just a PWA on your phone (it's built for iPhone btw, so it probably doesn't work with any Androids).
 
-**Open it:** https://achillgator.github.io/lift-log/
+**Open it on** https://achillgator.github.io/lift-log/
 
-## Install on iPhone
+## How to install on iPhone
 
-1. Open the link above in **Safari** (not Chrome).
+1. Open the link above in **Safari** (not Chrome, since there isn't an option to add to home screen as far as I'm aware).
 2. Tap **Share → Add to Home Screen → Add**.
-3. From then on, open Lift Log only from the Home Screen icon. The installed app keeps its own data, separate from the Safari tab, so anything entered in Safari doesn't carry over.
+3. Now, open Lift Log only from the home screen (there should be an icon there). The installed app has its own data, which is separate from the Safari tab. This means that **anything entered in Safari doesn't carry over**.
 
-After the first launch it works fully offline, including in airplane mode. When a new version is available, you'll see "Updated – tap to reload". Otherwise the update applies the next time you open the app, so it never interrupts a workout you're logging.
+After the first launch, it works fully offline. When a new version is available, you'll (hopefully) see "Updated – tap to reload".
 
 ## Getting started
 
-The app starts with a small exercise library, one example routine ("Example · Full body") and one example warm-up. Edit or delete them, then set up your own:
+On launch, there's a small exercise library, an example routine ("Example · Full body") and an example warm-up, just to get you started. You can:
 
 - **Build your routines in the app:** Settings → routines, exercises and quick-adds. Give each routine a weekday, and Home shows it as "Log today" on that day.
-- **Or import a program file:** Settings → Import program. A program file holds routines, exercises, quick-adds and rules, but no history. You can preview it before it's applied.
+- **Import a program file:** Settings → Import program. A program file holds routines, exercises, quick-adds and rules, but no history. You can preview it before it's applied.
 - **Bring in old notes:** Settings → Paste log turns lines like `2023-04-03 squat 3x5@95; bench 5@65, 5@65` into finished workouts.
-- **Add your bodyweight** so the trophies can rank your lifts.
+- **Add your bodyweight** so the trophies can rank your lifts (this is according to public data on natural male lifters, so take it with a grain of salt)
 
 ## Features
 
@@ -49,11 +49,11 @@ The app starts with a small exercise library, one example routine ("Example · F
 - **History:** every workout, newest first, all editable.
 - **Undo instead of "Are you sure?":** every log or delete gets an Undo toast. Typing 1000 for a 100 lb lift asks "Did you mean…?"
 
-Weights are in lb only.
+Weights are in lb only. (until someone actually finds this and asks for kgs)
 
 ## Back up your data
 
-Your data lives only on your phone, so if the phone is lost or the app is deleted, it's gone. iOS can also clear website data on its own, so backups are your job:
+Your data lives only on your phone, so if the phone is lost or the app is deleted, it's gone. iOS can also clear website data on its own, so you gotta do some backups:
 
 - **Settings → Export backup (JSON)** saves everything through the share sheet. Save it to Files or iCloud Drive. **Export sets (CSV)** gives you a spreadsheet of every set.
 - Home shows a reminder when your last backup is more than **7 days** old.
@@ -62,7 +62,10 @@ Your data lives only on your phone, so if the phone is lost or the app is delete
 
 ## Coming later
 
-- **v1.1:** daily habits with streaks, a calendar heatmap in History, a plate calculator using the plates you own, and a PR feed.
+- **v1.01:**
+  - an actually good design, that I spent way too much time making
+- **v1.1:**
+  - daily habits with streaks, a calendar heatmap in History, a plate calculator using the plates you own, and a PR feed.
 - **v2:**
   - progress photos (front, side and back, compared across two dates; they stay on the phone and are exported separately)
   - a training calendar with phases, test days and deload weeks
