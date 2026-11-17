@@ -60,21 +60,24 @@
   });
 </script>
 
-<header>
-  <h1>Progress</h1>
-  <Segmented options={SEGMENTS} value={segment} label="Progress section" onchange={(s) => go(`progress/${s.toLowerCase()}`)} />
-  <div class="range">
-    <Segmented options={RANGES} value={range} label="Chart range" onchange={setRange} />
-  </div>
-</header>
+<!-- The shared .screen wrapper gives the side margins and safe areas every tab uses. -->
+<div class="screen">
+  <header>
+    <h1>Progress</h1>
+    <Segmented options={SEGMENTS} value={segment} label="Progress section" onchange={(s) => go(`progress/${s.toLowerCase()}`)} />
+    <div class="range">
+      <Segmented options={RANGES} value={range} label="Chart range" onchange={setRange} />
+    </div>
+  </header>
 
-{#if segment === 'Lifts'}
-  <LiftsPanel {range} {today} {focusId} />
-{:else if segment === 'Runs'}
-  <RunsPanel {range} {today} />
-{:else}
-  <BodyPage {range} {today} />
-{/if}
+  {#if segment === 'Lifts'}
+    <LiftsPanel {range} {today} {focusId} />
+  {:else if segment === 'Runs'}
+    <RunsPanel {range} {today} />
+  {:else}
+    <BodyPage {range} {today} />
+  {/if}
+</div>
 
 <style>
   header { margin-bottom: 12px; }
