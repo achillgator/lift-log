@@ -15,6 +15,7 @@
   import { LogController } from './controller.svelte';
   import ExercisePicker from './ExercisePicker.svelte';
   import FinishSheet from './FinishSheet.svelte';
+  import { logHeaderAction } from './header';
 
   interface Props { sessionId: string; onclose: () => void; }
   let { sessionId, onclose }: Props = $props();
@@ -33,6 +34,8 @@
   let finishing = $state(false);
 
   const editing = $derived(log.session?.status === 'done');
+  // Hidden while the Finish sheet is open, so only one Finish shows at a time.
+  const headerAction = $derived(logHeaderAction({ hasSession: Boolean(log.session), editing, finishing }));
 
   function close() {
     if (!editing && log.sets.some((s) => s.done)) toasts.show('Draft saved. Resume it from Home.');
@@ -46,8 +49,8 @@
 
 <Sheet variant="full" title={log.title} onclose={close}>
   {#snippet trailing()}
-    {#if log.session}
-      <Button size="small" variant="primary" onclick={() => (finishing = true)}>{editing ? 'Done' : 'Finish'}</Button>
+    {#if headerAction}
+      <Button size="small" variant="primary" onclick={() => (finishing = true)}>{headerAction}</Button>
     {/if}
   {/snippet}
 
