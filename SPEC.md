@@ -68,8 +68,9 @@ squat 1.00/1.25/1.50/1.75/2.00; bench 0.75/1.00/1.25/1.50/1.75; deadlift
 Bronze/Silver/Gold/Platinum/Diamond. Below Bronze = "Unranked". These are rough
 rules of thumb, not population data.
 Each trophy: tier color + tier name + e1RM + ratio + bar with "N lb to <next
-tier>". Tap -> that lift's chart. Tier-up: one short shimmer. Tier colors
-come from DESIGN.md.
+tier>". Tap -> that lift's chart. Tier-up: one short moment that plays once
+(DESIGN.md picks it; until then, one short shimmer). Tier colors come from
+DESIGN.md.
 
 ### BODYWEIGHT CHART (v1)
 Main: 7-day rolling average, 3 px, accent color, monotone-cubic smoothing
@@ -141,7 +142,8 @@ Only bulk destructive actions get a confirm; everything else gets Undo.
   tune step, and DESIGN.md gets updated to match what I keep.
 - design/inspiration/ (screenshots + TASTE.md) is for design prompts only;
   never commit it.
-- Ignore Impeccable's system-font rule: SF Pro is a deliberate choice.
+- Ignore Impeccable's system-font rule: fonts are a deliberate choice set in
+  DESIGN.md (SF Pro until it says otherwise).
 - Skill findings that are bugs (contrast, tap targets, broken states,
   anything that doesn't match DESIGN.md) get fixed in the same session.
   Taste suggestions go in a "Design ideas" list in the PR description,
@@ -186,7 +188,7 @@ lift-log-photos-YYYY-MM-DD.zip, so .gitignore catches them.
 - PWA: `vite-plugin-pwa` (Workbox), `registerType: 'autoUpdate'`, precache all build assets so the app works fully offline. Web manifest: name, short_name, `display: 'standalone'`, theme/background colors, icons (192, 512, plus maskable, plus 180 apple-touch), `start_url` and `scope` set to `/lift-log/`.
 - Navigation: a tiny custom hash-based router (own code, no router library) so refreshes never 404 on static hosting.
 - Charts: hand-rolled SVG Svelte components (no chart library). Keep the bundle small.
-- Icons: Lucide (Svelte package). The trophy is one custom glyph drawn at the same stroke weight. Do not use Apple SF Symbols; licensing prohibits web use.
+- Icons: Lucide (Svelte package). Trophy art comes from DESIGN.md; until it lands, the trophy is one custom glyph drawn at the same stroke weight. Do not use Apple SF Symbols; licensing prohibits web use.
 - Tests: Vitest.
 
 ### Data model guidelines
@@ -227,10 +229,10 @@ iOS/Safari can evict site storage, and users can clear website data, so protect 
 - No rest timer and no screen wake lock: the app is for logging and viewing progress, not live coaching.
 
 ### Design: make it feel premium
-The look comes from DESIGN.md (written from the Claude Design handoff). It is the source of truth for colors, type, spacing, radii and components. The principles below apply where DESIGN.md is silent. Design skills (apple-design, Impeccable) are advisors: when one conflicts with DESIGN.md, DESIGN.md wins.
+The look comes from DESIGN.md (written from the Claude Design handoff). It is the source of truth for colors, type, spacing, radii and components. The look rules below hold until DESIGN.md lands; after that they apply only where DESIGN.md is silent. The functional requirements in them (tabular numerals, AA contrast, 44 pt targets, 16 px inputs, reduced motion, safe areas, dark mode, no CDN) always hold. Design skills (apple-design, Impeccable) are advisors: when one conflicts with DESIGN.md, DESIGN.md wins.
 
 **Typography**
-- System font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif` (SF Pro on iOS; no font download). This is a deliberate choice for native feel; ignore tooling that flags system fonts as generic. Numerals per DESIGN.md (SF Pro Rounded via `ui-rounded`, or SF Pro).
+- System font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif` (SF Pro on iOS; no font download). Fonts are a deliberate choice set in DESIGN.md; ignore tooling that flags system fonts as generic. Numerals per DESIGN.md: SF Pro Rounded via `ui-rounded`, SF Pro, or one self-hosted face precached with the app (never a CDN).
 - A type scale (e.g., Large Title 34, Title 22–28, Headline 17 semibold, Body 17, Callout 16, Footnote 13, Caption 12, plus a Big Number size), in rem units.
 - `font-variant-numeric: tabular-nums` on all numbers (weights, reps, totals) so digits don't jitter. Key numbers are big and bold; they're the hero of this app and must be readable at arm's length in dim light.
 - Tight letter-spacing on large titles (about -0.02em). Limit to 2–3 font weights.
@@ -238,8 +240,8 @@ The look comes from DESIGN.md (written from the Claude Design handoff). It is th
 **Color and surfaces**
 - Design tokens as CSS custom properties (`src/styles/tokens.css`): background, secondary background, surface, text, secondary text, separator, one accent, PR color, destructive red, and the five trophy tier colors. One accent; neutrals do the rest. Tier colors appear only on trophies.
 - Full dark mode via `prefers-color-scheme` (default to system), near-black background in dark mode, layered surfaces. All text passes WCAG AA (4.5:1).
-- Grouped, inset lists (iOS Settings style), with one group per exercise and never a card per set or cards inside cards. Consistent radii, hairline separators, no heavy borders. No gradients, glow or emoji anywhere.
-- Translucent material only on the tab bar: `backdrop-filter: blur(20px) saturate(180%)` with a semi-transparent background (include the `-webkit-` prefix).
+- Grouped, inset lists (iOS Settings style), with one group per exercise and never a card per set or cards inside cards. Consistent radii, hairline separators, no heavy borders. No glow or emoji anywhere. No gradients until DESIGN.md lands; the only possible exception is one full-screen background falloff behind all content (never on a component), and only if the design wide net picks it.
+- Translucent material only on the tab bar, until DESIGN.md lands and the design wide net decides whether the tab bar keeps it: `backdrop-filter: blur(20px) saturate(180%)` with a semi-transparent background (include the `-webkit-` prefix).
 
 **Layout**
 - 4/8pt spacing grid; consistent horizontal margins (16–20px).
@@ -250,14 +252,14 @@ The look comes from DESIGN.md (written from the Claude Design handoff). It is th
 - Spring physics, not linear timing: `svelte/motion` (`spring`, `tweened`), `svelte/transition` (`fly`, `fade`, `scale`, `slide`), `animate:flip` for reordering. View Transitions API where supported (progressive enhancement).
 - Most transitions 200–300ms. A set tap shows its check in under 100ms; animation confirms, never delays. Gestures track the finger 1:1.
 - Press states: scale to about 0.96–0.98 on `:active`.
-- Charts draw in; a PR or trophy tier-up gets one short, restrained moment (pulse or shimmer), not confetti.
+- Charts draw in; a PR or trophy tier-up gets one short, restrained moment that plays once (DESIGN.md picks it; until then, a pulse or shimmer), never confetti or a loop.
 - Honor `prefers-reduced-motion` by swapping to simple fades.
 
 **Haptics and feedback**
 - Skip haptics: iOS Safari does not support `navigator.vibrate`, and the known workarounds are unreliable. Use strong visual feedback instead (press states, animated checks).
 
 **Tuning (dev-only Tweaks panel)**
-- At the top of `#/kitchen-sink`: a control for every token in `tokens.css` that is a taste decision (numeral font, big-number size, accent, background warmth, radius, set-row height, chart line weight, motion speed).
+- At the top of `#/kitchen-sink`: a control for every token in `tokens.css` that is a taste decision. DESIGN.md lists them; until it lands, the list is numeral font, big-number size, accent, background warmth, radius, set-row height, chart line weight and motion speed.
 - Changes apply app-wide through CSS variables and are stored in localStorage only, never Dexie. The panel has Reset and "Copy values" (only the changed tokens, as CSS).
 - Copied values get locked into `tokens.css` and DESIGN.md in the next session, then the panel is reset. The panel never ships as a user feature; it stays behind Settings → Components.
 
@@ -267,7 +269,7 @@ The look comes from DESIGN.md (written from the Claude Design handoff). It is th
 - Smart defaults: sets pre-filled from the plan, steppers with press-and-hold acceleration.
 - Typo guard: a weight over 1.5× the target or over 500 lb shows an inline "Did you mean…?".
 - Launch: matching background color so there's no white flash; a simple, bold app icon glyph (no text).
-- Charts: minimal (faint axis, no gridlines), accent color for the main series, smooth monotone interpolation between real values only, gaps across breaks longer than 3 weeks, tap-and-drag scrub with date + value.
+- Charts: every lift offers both views, e1RM and the top set actually lifted (weight × reps); smooth monotone interpolation between real values only, gaps across breaks longer than 3 weeks, tap-and-drag scrub with date + value. Until DESIGN.md lands: minimal (faint axis, no gridlines), accent color for the main series.
 - Accessibility: semantic HTML, labels on icon buttons, visible focus states, sufficient contrast, scalable text.
 - Consistency over novelty: same radii, spacing, icon stroke width and animation curves everywhere. The same SetRow is used in logging, editing and history.
 

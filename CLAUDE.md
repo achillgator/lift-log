@@ -33,5 +33,5 @@ One feature phase per session. Run `npm test` and `npm run build` before every p
 - apple-design and impeccable live in `.claude/skills/`. They are advisors: DESIGN.md wins any conflict.
 - Never run /impeccable teach or init, overdrive or delight. bolder, quieter and live only when asked, during a tune step, and DESIGN.md gets updated to match what is kept.
 - `design/inspiration/` is for design prompts only; never commit it.
-- Ignore Impeccable's system-font rule: SF Pro is a deliberate choice.
+- Ignore Impeccable's system-font rule: fonts are a deliberate choice set in DESIGN.md (SF Pro until it says otherwise).
 - Findings that are bugs get fixed in the same session. Taste suggestions go in a "Design ideas" list in the PR description, never straight into code.
